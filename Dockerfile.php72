@@ -26,7 +26,7 @@ RUN yum -y install \
  php72-php-opcache.x86_64 \
  php72-php-pear.noarch \
  php72-php-pecl-zip.x86_64 \
-  php72-php-snmp.x86_64 \
+ php72-php-snmp.x86_64 \
  php72-php-soap.x86_64 \
  php72-php-tidy.x86_64 \
  php72-php-xmlrpc.x86_64 \
