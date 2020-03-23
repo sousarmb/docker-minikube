@@ -42,7 +42,7 @@ RUN yum -y install \
  php71-php-opcache.x86_64 \
  php71-php-pear.noarch \
  php71-php-pecl-zip.x86_64 \
-  php71-php-snmp.x86_64 \
+ php71-php-snmp.x86_64 \
  php71-php-soap.x86_64 \
  php71-php-tidy.x86_64 \
  php71-php-xmlrpc.x86_64 \
