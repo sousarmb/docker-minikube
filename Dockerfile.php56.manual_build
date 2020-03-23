@@ -1,0 +1,122 @@
+FROM rmbsousa/stuff:base_os_centos7.7
+
+RUN mkdir /software
+WORKDIR /software
+#
+# https://ftp.gnu.org/gnu/bison/bison-2.7.tar.xz
+COPY bison-2.7.tar.xz /software
+RUN tar xvf bison-2.7.tar.xz
+#
+# http://downloads.sourceforge.net/project/mcrypt/Libmcrypt/2.5.8/libmcrypt-2.5.8.tar.gz
+COPY libmcrypt-2.5.8.tar.gz /software
+RUN tar zxvf libmcrypt-2.5.8.tar.gz
+#
+# http://www.freetds.org/files/stable/freetds-0.95.95.tar.gz
+COPY freetds-0.95.95.tar.gz /software
+RUN tar zxvf freetds-0.95.95.tar.gz
+#
+# https://www.php.net/distributions/php-5.6.40.tar.gz
+COPY php-5.6.40.tar.gz /software
+RUN tar zxvf php-5.6.40.tar.gz
+
+WORKDIR /software/bison-2.7
+RUN chmod +x configure && \
+ mkdir build && \
+ ./configure --prefix=$(pwd)/build && \
+ make -j $(nproc) && \
+ make install && \
+ PATH=$(pwd)/build/bin:$PATH
+# PATH=$(pwd)/build/bin:$PATH php-build 5.6snapshot /phps/5.6
+
+WORKDIR /software/libmcrypt-2.5.8
+RUN ./configure && \
+ make && \
+ make install
+
+WORKDIR /software/freetds-0.95.95
+RUN ./configure --prefix=/usr/local/freetds --enable-msdblib --with-openssl && \
+ make && \
+ make install && \
+ ln -s /usr/local/freetds/lib/ /usr/local/freetds/lib64
+
+RUN echo "[it_mssql_development]" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " host = cfdev.database.windows.net" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " port = 1433" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " tds version = 8.0" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " client charset = UTF-8" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " text size = 64512" >> /usr/local/freetds/etc/freetds.conf && \
+ echo "[mssql_development]" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " host = cfdev.database.windows.net" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " port = 1433" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " tds version = 8.0" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " client charset = UTF-8" >> /usr/local/freetds/etc/freetds.conf && \
+ echo " text size = 64512" >> /usr/local/freetds/etc/freetds.conf
+
+RUN echo /usr/local/lib64 >> /etc/ld.so.conf && \
+ echo /usr/local/lib >> /etc/ld.so.conf && \
+ echo /usr/lib >> /etc/ld.so.conf && \
+ echo /usr/lib64 >> /etc/ld.so.conf && \
+ ldconfig
+
+WORKDIR /software/php-5.6.40
+RUN ./configure --enable-opcache \
+  --enable-bcmath \
+  --enable-calendar \
+  --enable-dom \
+  --enable-exif \
+  --enable-filter \
+  --enable-ftp \
+  --enable-hash \
+  --enable-intl \
+  --enable-json \
+  --enable-libxml \
+  --enable-session \
+  --enable-mbstring \
+  --enable-pcntl \
+  --enable-pdo \
+  --enable-simplexml \
+  --enable-soap \
+  --enable-sockets \
+  --enable-xml \
+  --enable-xmlreader \
+  --enable-xmlwriter \
+  --enable-zip \
+  --prefix=/usr/local/php5 \
+  --with-apxs2=/usr/bin/apxs \
+  --with-bz2=/usr \
+  --with-config-file-path=/usr/local/php5/etc \
+  --with-curl=/usr/bin \
+  --with-freetype-dir=/usr \
+  --with-gd \
+  --with-iconv \
+  --with-iconv-dir=/usr \
+  --with-jpeg-dir=/usr \
+  --with-ldap \
+  --with-libdir=/lib64 \
+  --with-mcrypt=/usr \
+  --with-mssql=/usr/local/freetds \
+  --with-openssl=/usr \
+  --with-openssl-dir=/usr \
+  --with-pcre-regex \
+  --with-pdo-dblib=/usr/local/freetds \
+  --with-pear \
+  --with-png-dir=/usr \
+  --with-readline \
+  --with-snmp=/usr \
+  --with-tidy=/usr \
+  --with-xmlrpc \
+  --with-xpm-dir=/usr \
+  --with-xsl=/usr \
+  --with-zlib \
+  --with-zlib-dir=/usr
+RUN make && \
+ make install
+
+RUN cp php.ini-production /etc/php.ini
+RUN sed -i 's/;date.timezone =.*/  date.timezone = "Europe\/Lisbon"/' /etc/php.ini
+RUN sed -i 's/DirectoryIndex index.html.*/  DirectoryIndex index.php index.html index.html.var/' /etc/httpd/conf/httpd.conf
+RUN echo AddType application/x-httpd-php .php >> /etc/httpd/conf/httpd.conf
+
+WORKDIR /
+ENTRYPOINT ["bash"]
+EXPOSE 80
