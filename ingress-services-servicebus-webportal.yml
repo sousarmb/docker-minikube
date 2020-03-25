@@ -1,0 +1,58 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: vhost-ingress-servicebus
+  namespace: default
+spec:
+  rules:
+    - host: servicebus.local
+      http:
+        paths:
+          - backend:
+              serviceName: www-service-servicebus
+              servicePort: 80
+    - host: webportal.local
+      http:
+        paths:
+          - backend:
+              serviceName: www-service-webportal
+              servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: www-service-servicebus
+  labels:
+    run: www-service-servicebus
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: php-www-servicebus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: www-service-webportal
+  labels:
+    run: www-service-webportal
+spec:
+  type: LoadBalancer
+  ports:
+    - name: ssh
+      port: 22
+      targetPort: 22
+      protocol: TCP
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+    - name: xdebug
+      port: 9000
+      targetPort: 9000
+      protocol: TCP
+  selector:
+    app: php-www-webportal
