@@ -1,0 +1,12 @@
+FROM php:7.0.33-apache
+
+RUN apt update
+RUN apt upgrade -y
+RUN apt install -y apt-utils \
+ curl \
+ iputils-ping \
+ less \
+ nano \
+ netcat
+
+ENTRYPOINT ["/bin/bash"]
