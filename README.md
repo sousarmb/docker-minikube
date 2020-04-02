@@ -17,7 +17,7 @@ VirtualBox so you won't be able to use them until you disable Hyper-V again
 (... don't worry, it's easy and harmless to [switch Hyper-V on or off](https://www.youtube.com/watch?v=XJTeQdJUMDM), 
 just takes a reboot)
 
-Run `docker run -it -p 80:80 -v /host_drive_letter/directory/where/code/is:/container_directory/from/where/code/will/serve rmbsousa/stuff:php_5.6` 
+Run `docker run -it -p 80:80 -v /host_drive_letter/directory/where/code/is:/guest_container_directory/from/where/code/will/serve rmbsousa/stuff:php56` 
 to pull the image locally and start a container based on it.
  
 After this you will be at the container prompt where you can do what it takes 
