@@ -1,5 +1,5 @@
 # docker-minikube
-Files needed to build containers and run your local BOP dev environment in Docker or minikube. 
+Files needed to build containers and run your (Microsoft Windows) local BOP dev environment in Docker or minikube. 
 
 ## Container images available:
 * rmbsousa/stuff:php56
