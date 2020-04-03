@@ -18,24 +18,11 @@ spec:
     spec:
       containers:
         - name: php-www-servicebus
-          image: rmbsousa/stuff:php70_xdebug
-          command: ["bash", "-c", "--"]
-          args: ["while true; do sleep 10; done;"]
-#          ports:
-#            - containerPort: 80
+          image: rmbsousa/4bop:php70_xdebug_active
           volumeMounts:
             - name: app-code
               mountPath: /www
-#            - name: config-code
-#              mountPath: /var/www
-#          lifecycle:
-#            postStart:
-#              exec:
-#                command: ["/bin/bash", "/var/www/minikube/config-servicebus.sh"]
       volumes:
         - name: app-code
           hostPath:
-            path: "/c/Users/NB26175/Zend/workspaces/DefaultWorkspace"
-#        - name: config-code
-#          hostPath:
-#            path: "/c/Users/NB26175/projects"
+            path: "/c/Users/NBxxxxx/Zend/workspaces/DefaultWorkspace"
