@@ -1,0 +1,70 @@
+FROM rmbsousa/4bop:php70_xdebug
+
+WORKDIR /usr/local/etc/php/conf.d
+RUN echo "xdebug.default_enable=1" >> docker-php-ext-xdebug.ini && \
+ echo "xdebug.remote_enable=1" >> docker-php-ext-xdebug.ini && \
+ echo "xdebug.remote_autostart=0" >> docker-php-ext-xdebug.ini && \
+ echo "xdebug.remote_connect_back=0" >> docker-php-ext-xdebug.ini && \
+ echo "xdebug.remote_port=9001" >> docker-php-ext-xdebug.ini && \
+ echo "xdebug.remote_host=host.docker.internal" >> docker-php-ext-xdebug.ini && \
+ echo "xdebug.idekey=PHPSTORM" >> docker-php-ext-xdebug.ini && \
+ echo "xdebug.remote_log=/www/xdebug_log" >> docker-php-ext-xdebug.ini && \
+ echo "xdebug.remote_log_level=7" >> docker-php-ext-xdebug.ini
+
+WORKDIR /var/log
+RUN mkdir httpd && \
+ mkdir applications
+WORKDIR /var/log/applications
+RUN mkdir portal && \
+ mkdir servicenavigator && \
+ mkdir services && \
+ mkdir zf
+WORKDIR /var/log/applications/portal
+RUN touch portal.log
+WORKDIR /var/log/applications/servicenavigator
+RUN touch servicenavigator.log
+WORKDIR /var/log/applications/zf
+RUN touch zf.log
+RUN chown www-data:www-data -R /var/log/applications && \
+ chmod -R 755 /var/log/applications
+
+WORKDIR /
+RUN mkdir www
+
+WORKDIR /etc/apache2/sites-available
+RUN apache2ctl -k stop && \
+# webportal config
+ touch webportal.local.conf && \
+ echo "<VirtualHost *:80>" >> webportal.local.conf && \
+ echo " ServerName webportal.local" >> webportal.local.conf && \
+ echo " DocumentRoot /www/webportal.tnf.nl/htdocs/" >> webportal.local.conf && \
+ echo " <Directory '/www/webportal.tnf.nl/htdocs'>" >> webportal.local.conf && \
+ echo "  AllowOverride All" >> webportal.local.conf && \
+ echo "  Options +Indexes" >> webportal.local.conf && \
+ echo "  DirectoryIndex index.php" >> webportal.local.conf && \
+ echo "  Require all granted" >> webportal.local.conf && \
+ echo " </Directory>" >> webportal.local.conf && \
+ echo " CustomLog /var/log/httpd/access_log.webportal_80 common" >> webportal.local.conf && \
+ echo " ErrorLog /var/log/httpd/error_log.webportal_80" >> webportal.local.conf && \
+ echo "</VirtualHost>" >> webportal.local.conf && \
+# servicebus config
+ touch servicebus.local.conf && \
+ echo "<VirtualHost *:80>" >> servicebus.local.conf && \
+ echo " ServerName servicebus.local" >> servicebus.local.conf && \
+ echo " DocumentRoot /www/servicebus/htdocs" >> servicebus.local.conf && \
+ echo " <Directory '/www/servicebus/htdocs'>" >> servicebus.local.conf && \
+ echo "  AllowOverride All" >> servicebus.local.conf && \
+ echo "  Options +Indexes" >> servicebus.local.conf && \
+ echo "  DirectoryIndex index.php" >> servicebus.local.conf && \
+ echo "  Require all granted" >> servicebus.local.conf && \
+ echo " </Directory>" >> servicebus.local.conf && \
+ echo " CustomLog /var/log/httpd/access_log.servicebus_80 common" >> servicebus.local.conf && \
+ echo " ErrorLog /var/log/httpd/error_log.servicebus_80" >> servicebus.local.conf && \
+ echo "# ServerAlias *:8282" >> servicebus.local.conf && \
+ echo "</VirtualHost>" >> servicebus.local.conf && \
+ a2enmod rewrite && \
+ a2ensite webportal.local servicebus.local
+
+EXPOSE 80/tcp 9001/tcp
+
+ENTRYPOINT ["apache2ctl", "-D", "FOREGROUND"]
