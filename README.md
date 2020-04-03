@@ -40,7 +40,7 @@ Once you have downloaded and installed the previously listed software:
 2. start the minikube cluster with `minikube start --vm-driver=virtualbox --cpus=2 --memory=4gb --disk-size=10gb --container-runtime=cri-o`
 3. enable the [ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress/) with `minikube addons enable ingress` 
 4. register [services](https://kubernetes.io/docs/concepts/services-networking/service/) and ingress controller with `kubectl create -f ingress-services-servicebus-webportal` 
-5. [deploy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) with `kubectl create -f deployment-webportal[-xdebug].yml`.
+5. [deploy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) with `kubectl create -f deployment-webportal-xdebug.yml`.
 6. start the dashboard with `minikube dashboard` to see the deployment status 
 7. run `minikube ip` in a new terminal / powershell to get the cluster ip address and modify your hosts file accordingly 
 
