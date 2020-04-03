@@ -2,12 +2,11 @@
 Files needed to build containers and run your (Microsoft Windows) local BOP dev environment in Docker or minikube. 
 
 ## Container images available:
-* rmbsousa/stuff:php56
-* rmbsousa/stuff:php70
-* rmbsousa/stuff:php70_xdebug
-* rmbsousa/stuff:php70_xdebug_config (...the default for _Xdebug_)
-* rmbsousa/stuff:php72
-* rmbsousa/stuff:php74
+* rmbsousa/4bop:php56 
+* rmbsousa/4bop:php70_xdebug 
+* rmbsousa/4bop:php70_xdebug_active 
+* rmbsousa/4bop:php74_xdebug 
+* rmbsousa/4bop:php74_xdebug_active 
 
 ## Use docker?
 Download and install from [official source](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
