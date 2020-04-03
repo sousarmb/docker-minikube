@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: php-www-webportal
-          image: rmbsousa/stuff:php70_xdebug_config
+          image: rmbsousa/4bop:php70_xdebug_active
 #          command: ["bash", "-c", "--"]
 #          args: ["while true; do sleep 10; done;"]
 #          ports:
@@ -35,7 +35,7 @@ spec:
       volumes:
         - name: app-code
           hostPath:
-            path: "/c/Users/NB26175/Zend/workspaces/DefaultWorkspace"
+            path: "/c/Users/NBxxxxx/Zend/workspaces/DefaultWorkspace"
 #        - name: config-code
 #          hostPath:
-#            path: "/c/Users/NB26175/projects"
+#            path: "/c/Users/NBxxxxx/projects"
