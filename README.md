@@ -16,11 +16,8 @@ VirtualBox so you won't be able to use them until you disable Hyper-V again
 (... don't worry, it's easy and harmless to [switch Hyper-V on or off](https://www.youtube.com/watch?v=XJTeQdJUMDM), 
 just takes a reboot)
 
-Run `docker run -it -p 80:80 -v /host_drive_letter/directory/where/code/is:/guest_container_directory/from/where/code/will/serve rmbsousa/stuff:php56` 
-to pull the image locally and start a container based on it.
- 
-After this you will be at the container prompt where you can do what it takes 
-to configure the website. Check __config-webportal.sh__ to see how to.
+Run `docker run -it -p 80:80 -v /host_drive_letter/directory/where/code/is:/guest_container_directory/from/where/code/will/serve rmbsousa/4bop:php56` 
+to pull the image locally and start a container based on it. After this you will be at the container prompt.
 
 Run `docker inspect container_id` to see container ip address and change your 
 Windows hosts file accordingly.
@@ -32,8 +29,7 @@ Download and install from official source:
 * [kubectl](https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/windows/amd64/kubectl.exe) (... is a command, place in a directory registered in your host _%PATH%_) ([docs](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-windows))
 
 Download as well:
-* config-webportal.sh (not needed for Xdebug deployment)
-* deployment-webportal.yml (for xXdebug use the _*-xdebug.yml_ version)
+* deployment-webportal-xdebug.yml
 * ingress-services-servicebus-webportal.yml
 
 ### Choose container image to run
@@ -68,7 +64,7 @@ You just need to configure:
       * set "IDE Key" to "PHPSTORM"
       * set "Port" to 9001
       
-Also you need to install browser extension "Xdebug helper" for Chrome (i couldn't get the one for Firefox to work...), set "IDE key" to "PHPSTORM" and enable "Debug".
+Also you need to install browser extension "Xdebug helper" for Chrome (or Firefox), set "IDE key" to "PHPSTORM" and enable "Debug".
 
 When you're ready to start debugging, click "Start listening for PHP debug connections" (phpstorm) button and refresh the browser page. The debug session should start at once.
 
