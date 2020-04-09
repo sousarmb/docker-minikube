@@ -88,7 +88,8 @@ RUN echo "[it_mssql_development]" >> /etc/freetds/freetds.conf && \
  echo " text size = 64512" >> /etc/freetds/freetds.conf
 
 WORKDIR /var/log
-RUN mkdir httpd && \
+RUN mkdir services && \
+ mkdir httpd && \
  mkdir applications
 WORKDIR /var/log/applications
 RUN mkdir portal && \
