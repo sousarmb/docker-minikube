@@ -36,7 +36,8 @@ RUN apt install -y apt-utils \
  mcrypt \
  snmp \
  unixodbc \
- unixodbc-dev
+ unixodbc-dev \
+ unzip
 
 RUN echo /usr/lib/x86_64-linux-gnu >> /etc/ld.so.conf && \
  echo /usr/local/lib64 >> /etc/ld.so.conf && \
